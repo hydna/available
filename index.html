@@ -39,7 +39,7 @@
 
       chan.onerror = function (e) {
         notSupported.style.display = "block";
-        notSupported.getElementById("not-supported").innerHTML = e.message;
+        notSupported.innerHTML = e.message;
       };
 
       chan.onmessage = function (e) {
