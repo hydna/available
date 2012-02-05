@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Is Hydna-support Available?</title>
+    <script type="text/javascript" src="http://cdn.hydna.com/1/hydna.js"></script>
+  </head>
+  <style>
+    #not-supported,
+    #supported {
+      display: none;
+    }
+
+    #not-supported {
+      background: red;
+    }
+  </style>
+  <body>
+    <h1></h1>
+    <p>This site checks if you can use Hydna in your web browser.
+       <span id="supported">Supported</span><span id="not-supported"></span></p>
+    <noscript>
+      Not available, you must enable Javascript in order to use Hydna.
+    </noscript>
+    <script>
+      var rnddata = ((new Date()).getTime()).toString();
+      var supported = document.getElementById("supported");
+      var notSupported = document.getElementById("not-supported");
+      var chan = new HydnaChannel('public.hydna.net/5000', 'rw');
+      var timer;
+
+      chan.onopen = function (e) {
+        timer = setTimeout(function () {
+          notSupported.style.display = "block";
+          notSupported.innerHTML = "Did not receive data in time";
+        }, 5000);
+        this.send(rnddata.toString());
+      };
+
+      chan.onerror = function (e) {
+        notSupported.style.display = "block";
+        notSupported.getElementById("not-supported").innerHTML = e.message;
+      };
+
+      chan.onmessage = function (e) {
+        if (e.data == rnddata) {
+          clearTimeout(timer);
+          supported.style.display = "block";
+        }
+      };
+    </script>
+    <span>
+    </span>
+  </body>
+</html>
